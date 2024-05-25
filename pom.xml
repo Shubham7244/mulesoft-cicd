@@ -35,8 +35,8 @@
 					  <muleVersion>4.4.0</muleVersion>
 					  <username>Shubhams_05</username>
 					  <password>Mulesoft@24</password>
-					  <applicationName>muleapp</applicationName>
-					  <environment>Design</environment>
+					  <applicationName>app7244</applicationName>
+					  <environment>dev</environment>
 					  <region>us-east-1</region>
 					  <workers>1</workers>
 					  <workerType>MICRO</workerType>
