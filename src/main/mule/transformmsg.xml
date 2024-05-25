@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="7c610a3a-d238-4b33-a258-e44a09671963" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="transformmsgFlow" doc:id="f7c3555b-389a-4179-8426-5352469f653d" >
+		<http:listener doc:name="Listener" doc:id="8d693131-bf6c-4db2-ba91-114c4d79f4cc" config-ref="HTTP_Listener_config" path="/test"/>
+		<logger level="INFO" doc:name="Logger" doc:id="ec83adea-acbb-4a1a-b6ed-cfcc5a2f413d" message='#["before transorm message"]'/>
+		<ee:transform doc:name="Transform Message" doc:id="d631aebb-b92f-4044-b2a5-51e8ab9a77c6" >
+			<ee:message >
+				<ee:set-payload ><![CDATA["now setting the msg"]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="name" ><![CDATA[attributes.queryParams.name]]></ee:set-variable>
+				<ee:set-variable variableName="id" ><![CDATA[attributes.queryParams.id]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="WARN" doc:name="Logger" doc:id="67a7d289-c63f-4320-bfce-8fd62eee4369" message='#["Your name is " ++ vars.name]'/>
+	</flow>
+	<flow name="transformmsgFlow1" doc:id="b0c03385-5b69-4df3-b945-47f51f844895" >
+		<http:listener doc:name="Listener" doc:id="12a35412-9340-487e-bed1-cbc01d6ef311" config-ref="HTTP_Listener_config" path="/test"/>
+		<ee:transform doc:name="Transform Message" doc:id="3c186d80-d4db-4624-a051-111e377f7a6a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+"..hi " ++ payload.name ++ " you are working for " ++ payload.org ++ "with id " ++ payload.id]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
